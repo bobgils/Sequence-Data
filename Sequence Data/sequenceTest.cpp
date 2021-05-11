@@ -14,7 +14,7 @@
 #include "Sequence\Sequence.h"  // Provides the sequence class with double items.
 using namespace std;
 
-typedef float DATATYPE;
+typedef float DATATYPE;  // designate data type here
 
 // Descriptions and points for each of the tests:
 const size_t MANY_TESTS = 6;
