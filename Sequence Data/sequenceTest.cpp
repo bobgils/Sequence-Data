@@ -241,7 +241,7 @@ int test2()
 {
     const size_t TESTSIZE = 30;
     Sequence<float> test;
-    double i;
+    float i;
 
     // Put three items in the sequence
     cout << "Using attach to put 20 and 30 in the sequence, and then calling\n";
@@ -409,7 +409,7 @@ int test4()
     const size_t TESTSIZE = 30;
     Sequence<int> original; // A sequence that we'll copy.
     int items[2 * TESTSIZE];
-    size_t i;
+    int i;
 
     // Set up the items array to conatin 1...2*TESTSIZE.
     for (i = 1; i <= 2 * TESTSIZE; i++)
@@ -487,11 +487,11 @@ int test5()
     const size_t TESTSIZE = 30;
     Sequence<float> original; // A sequence that we'll copy.
     float items[2 * TESTSIZE];
-    size_t i;
+    int i;
 
     // Set up the items array to conatin 1...2*TESTSIZE.
     for (i = 1; i <= 2 * TESTSIZE; i++)
-        items[i - 1] = i;
+        items[i - 1] = (float)i;
 
     // Test copying of an empty sequence. After the copying, we change original.
     cout << "Assignment operator test: for an empty sequence." << endl;
@@ -502,7 +502,7 @@ int test5()
 
     // Test copying of a sequence with current item at the tail.
     cout << "Assignment operator test: cursor at tail." << endl;
-    for (i = 2; i <= 2 * TESTSIZE; i++)
+    for (float i = 2; i <= 2 * TESTSIZE; i++)
         original.attach(i);
     Sequence<float> copy2;
 
@@ -581,7 +581,7 @@ int test6()
     const size_t TESTSIZE = 30;
     Sequence<char> testa, testi;
     char items[2 * TESTSIZE];
-    size_t i;
+    int i;
 
     // Set up the items array to conatin 1...2*TESTSIZE.
     for (i = 1; i <= 2 * TESTSIZE; i++)
