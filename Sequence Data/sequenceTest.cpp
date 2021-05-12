@@ -14,8 +14,6 @@
 #include "Sequence\Sequence.h"  // Provides the sequence class with double items.
 using namespace std;
 
-typedef float DATATYPE;  // designate data type here
-
 // Descriptions and points for each of the tests:
 const size_t MANY_TESTS = 6;
 const int POINTS[MANY_TESTS + 1] = {
@@ -44,8 +42,9 @@ const char DESCRIPTION[MANY_TESTS + 1][256] = {
 //     b. test.is_item() is has_cursor.
 //   Otherwise the return value is false.
 //   In either case, a description of the test result is printed to cout.
-// **************************************************************************
-bool test_basic(const Sequence<DATATYPE>& test, size_t s, bool has_cursor)
+// *************************************************************************
+template <class Item>
+bool test_basic(const Sequence<Item> test, size_t s, bool has_cursor)
 {
     bool answer;
 
@@ -78,7 +77,8 @@ bool test_basic(const Sequence<DATATYPE>& test, size_t s, bool has_cursor)
 //   If any of this fails, the return value is false.
 //   NOTE: The test sequence has been changed by advancing its cursor.
 // **************************************************************************
-bool test_items(Sequence<DATATYPE>& test, size_t s, size_t i, double items[])
+template <class Item>
+bool test_items(Sequence<Item> test, size_t s, size_t i, Item items[])
 {
     bool answer = true;
 
@@ -127,7 +127,8 @@ bool test_items(Sequence<DATATYPE>& test, size_t s, size_t i, double items[])
 //   d. if cursor_spot >= s, then test must not have a cursor.
 // NOTE: The function also moves the cursor off the sequence.
 // **************************************************************************
-bool correct(Sequence<DATATYPE>& test, size_t size, size_t cursor_spot, double items[])
+template <class Item>
+bool correct(Sequence<Item> test, size_t size, size_t cursor_spot, Item items[])
 {
     bool has_cursor = (cursor_spot < size);
 
@@ -167,10 +168,10 @@ bool correct(Sequence<DATATYPE>& test, size_t size, size_t cursor_spot, double i
 // **************************************************************************
 int test1()
 {
-    Sequence<DATATYPE> empty;                            // An empty sequence
-    Sequence<DATATYPE> test;                             // A sequence to add items to
-    double items1[4] = { 5, 10, 20, 30 };  // These 4 items are put in a sequence
-    double items2[4] = { 10, 15, 20, 30 }; // These are put in another sequence
+    Sequence<int> empty;                            // An empty sequence
+    Sequence<int> test;                             // A sequence to add items to
+    int items1[4] = { 5, 10, 20, 30 };  // These 4 items are put in a sequence
+    int items2[4] = { 10, 15, 20, 30 }; // These are put in another sequence
 
     // Test that the empty sequence is really empty
     cout << "Starting with an empty sequence." << endl;
@@ -226,6 +227,7 @@ int test1()
     // All tests have been passed
     cout << "All tests of this first function have been passed." << endl;
     return POINTS[1];
+
 }
 
 
@@ -238,8 +240,8 @@ int test1()
 int test2()
 {
     const size_t TESTSIZE = 30;
-    Sequence<DATATYPE> test;
-    double i;
+    Sequence<float> test;
+    float i;
 
     // Put three items in the sequence
     cout << "Using attach to put 20 and 30 in the sequence, and then calling\n";
@@ -250,10 +252,10 @@ int test2()
     test.advance();
     if (test.is_item())
     {
-        cout << "failed." << endl;
+        std::cout << "failed." << endl;
         return 0;
     }
-    cout << "passed." << endl;
+    std::cout << "passed." << endl;
 
     // Insert 10 at the front and run the cursor off the end again
     cout << "Inserting 10, which should go at the sequence's front." << endl;
@@ -312,7 +314,7 @@ int test3()
 {
     const size_t TESTSIZE = 30;
 
-    Sequence<DATATYPE> test;
+    Sequence<double> test;
 
     // Within this function, I create several different sequences using the
     // items in these arrays:
@@ -405,9 +407,9 @@ int test3()
 int test4()
 {
     const size_t TESTSIZE = 30;
-    Sequence<DATATYPE> original; // A sequence that we'll copy.
-    double items[2 * TESTSIZE];
-    size_t i;
+    Sequence<int> original; // A sequence that we'll copy.
+    int items[2 * TESTSIZE];
+    int i;
 
     // Set up the items array to conatin 1...2*TESTSIZE.
     for (i = 1; i <= 2 * TESTSIZE; i++)
@@ -415,7 +417,7 @@ int test4()
 
     // Test copying of an empty sequence. After the copying, we change original.
     cout << "Copy constructor test: for an empty sequence." << endl;
-    Sequence<DATATYPE> copy1(original);
+    Sequence<int> copy1(original);
     original.attach(1); // Changes the original sequence, but not the copy.
     if (!correct(copy1, 0, 0, items)) return 0;
 
@@ -423,7 +425,7 @@ int test4()
     cout << "Copy constructor test: for a sequence with cursor at tail." << endl;
     for (i = 2; i <= 2 * TESTSIZE; i++)
         original.attach(i);
-    Sequence<DATATYPE> copy2(original);
+    Sequence<int> copy2(original);
     original.remove_current(); // Delete tail from original, but not the copy
     original.start();
     original.advance();
@@ -437,7 +439,7 @@ int test4()
     for (i = 1; i < TESTSIZE; i++)
         original.advance();
     // Cursor is now at location [TESTSIZE] (counting [0] as the first spot).
-    Sequence<DATATYPE> copy3(original);
+    Sequence<int> copy3(original);
     original.start();
     original.advance();
     original.remove_current(); // Delete 2 from original, but not the copy.
@@ -449,7 +451,7 @@ int test4()
     original.insert(2);
     original.start();
     // Cursor is now at the front.
-    Sequence<DATATYPE> copy4(original);
+    Sequence<int> copy4(original);
     original.start();
     original.advance();
     original.remove_current(); // Delete 2 from original, but not the copy.
@@ -462,7 +464,7 @@ int test4()
     while (original.is_item())
         original.advance();
     // There is now no current item.
-    Sequence<DATATYPE> copy5(original);
+    Sequence<int> copy5(original);
     original.start();
     original.advance();
     original.remove_current(); // Delete 2 from original, but not the copy.
@@ -483,26 +485,26 @@ int test4()
 int test5()
 {
     const size_t TESTSIZE = 30;
-    Sequence<DATATYPE> original; // A sequence that we'll copy.
-    double items[2 * TESTSIZE];
-    size_t i;
+    Sequence<float> original; // A sequence that we'll copy.
+    float items[2 * TESTSIZE];
+    int i;
 
     // Set up the items array to conatin 1...2*TESTSIZE.
     for (i = 1; i <= 2 * TESTSIZE; i++)
-        items[i - 1] = i;
+        items[i - 1] = (float)i;
 
     // Test copying of an empty sequence. After the copying, we change original.
     cout << "Assignment operator test: for an empty sequence." << endl;
-    Sequence<DATATYPE> copy1;
+    Sequence<float> copy1;
     copy1 = original;
     original.attach(1); // Changes the original sequence, but not the copy.
     if (!correct(copy1, 0, 0, items)) return 0;
 
     // Test copying of a sequence with current item at the tail.
     cout << "Assignment operator test: cursor at tail." << endl;
-    for (i = 2; i <= 2 * TESTSIZE; i++)
+    for (float i = 2; i <= 2 * TESTSIZE; i++)
         original.attach(i);
-    Sequence<DATATYPE> copy2;
+    Sequence<float> copy2;
 
     copy2 = original;
     original.remove_current(); // Delete tail from original, but not the copy
@@ -519,7 +521,7 @@ int test5()
     for (i = 1; i < TESTSIZE; i++)
         original.advance();
     // Cursor is now at location [TESTSIZE] (counting [0] as the first spot).
-    Sequence<DATATYPE> copy3;
+    Sequence<float> copy3;
     copy3 = original;
     original.start();
     original.advance();
@@ -532,7 +534,7 @@ int test5()
     original.insert(2);
     original.start();
     // Cursor is now at the front.
-    Sequence<DATATYPE> copy4;
+    Sequence<float> copy4;
     copy4 = original;
     original.start();
     original.advance();
@@ -546,7 +548,7 @@ int test5()
     while (original.is_item())
         original.advance();
     // There is now no current item.
-    Sequence<DATATYPE> copy5;
+    Sequence<float> copy5;
     copy5 = original;
     original.start();
     original.advance();
@@ -577,30 +579,26 @@ int test5()
 int test6()
 {
     const size_t TESTSIZE = 30;
-    Sequence<DATATYPE> testa, testi;
-    double items[2 * TESTSIZE];
-    size_t i;
+    Sequence<char> testa, testi;
+    char items[2 * TESTSIZE];
+    int i;
 
     // Set up the items array to conatin 1...2*TESTSIZE.
     for (i = 1; i <= 2 * TESTSIZE; i++)
-        items[i - 1] = i;
+        items[i - 1] = 'A' + i;
 
     cout << "Testing to see that attach works correctly when the\n";
     cout << "current capacity is exceeded." << endl;
     for (i = 1; i <= 2 * TESTSIZE; i++)
-        testa.attach(i);
-    if (!correct
-    (testa, 2 * TESTSIZE, 2 * TESTSIZE - 1, items)
-        )
+        testa.attach('A' + i);
+    if (!correct(testa, 2 * TESTSIZE, 2 * TESTSIZE - 1, items) )
         return 0;
 
     cout << "Testing to see that insert works correctly when the\n";
     cout << "current capacity is exceeded." << endl;
     for (i = 2 * TESTSIZE; i >= 1; i--)
-        testi.insert(i);
-    if (!correct
-    (testi, 2 * TESTSIZE, 0, items)
-        )
+        testi.insert('A' + i);
+    if (!correct(testi, 2 * TESTSIZE, 0, items))
         return 0;
 
     // All tests passed

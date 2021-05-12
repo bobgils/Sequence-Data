@@ -86,7 +86,7 @@ public:
     void advance( );
     void insert(const value_type& entry);
     void attach(const value_type& entry);
-    void operator =(const Sequence& source);
+    void operator =(const Sequence<Item>& source);
 	void remove_current( );
 
     // CONSTANT MEMBER FUNCTIONS
