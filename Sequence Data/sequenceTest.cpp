@@ -11,6 +11,7 @@
 
 #include <iostream>     // Provides cout.
 #include <cstdlib>      // Provides size_t.
+#include <string>
 #include "Sequence\Sequence.h"  // Provides the sequence class with double items.
 using namespace std;
 
@@ -240,15 +241,18 @@ int test1()
 int test2()
 {
     const size_t TESTSIZE = 30;
-    Sequence<float> test;
+    Sequence<string> test;
     float i;
+    string items[] = { "Olympia", "Denver", "Trenton", "Cheyenne", "Tallahassee" };
 
     // Put three items in the sequence
-    cout << "Using attach to put 20 and 30 in the sequence, and then calling\n";
+    cout << "Using attach to put Denver and Trenton in the sequence, and then calling\n";
     cout << "advance, so that is_item should return false ... ";
     cout.flush();
-    test.attach(20);
-    test.attach(30);
+    test.attach("Denver");
+    test.attach("Trenton");
+    test.attach("Cheyenne");
+    test.attach("Tallahassee");
     test.advance();
     if (test.is_item())
     {
@@ -257,13 +261,15 @@ int test2()
     }
     std::cout << "passed." << endl;
 
-    // Insert 10 at the front and run the cursor off the end again
-    cout << "Inserting 10, which should go at the sequence's front." << endl;
+    // Insert Seatle at the front and run the cursor off the end again
+    cout << "Inserting Olympia, which should go at the sequence's front." << endl;
     cout << "Then calling advance three times to run cursor off the sequence ...";
     cout.flush();
-    test.insert(10);
-    test.advance(); // advance to the 20
-    test.advance(); // advance to the 30
+    test.insert("Olympia");
+    test.advance(); // advance to the Denver
+    test.advance(); // advance to the Trenton
+    test.advance(); // advance to the Cheyenne
+    test.advance(); // advance to the Talahassee
     test.advance(); // advance right off the sequence
     if (test.is_item())
     {
@@ -274,20 +280,20 @@ int test2()
 
     // Attach more items until the sequence becomes full.
     // Note that the first attach should attach to the end of the sequence.
-    cout << "Calling attach to put the numbers 40, 50, 60 ...";
+    cout << "Calling attach to put more city names ...";
     cout << TESTSIZE * 10 << " at the sequence's end." << endl;
-    for (i = 4; i <= TESTSIZE; i++)
-        test.attach(i * 10);
+    for (int i = 5; i <= TESTSIZE; i++)
+        test.attach(items[i % 5]);
 
     // Test that the sequence is correctly filled.
-    cout << "Now I will test that the sequence has 10, 20, 30, ...";
+    cout << "Now I will test that the sequence has Olympia, Denver, Trenton,  ...";
     cout << TESTSIZE * 10 << "." << endl;
     test.start();
-    for (i = 1; i <= TESTSIZE; i++)
+    for (int i = 0; i <= TESTSIZE; i++)
     {
-        if ((!test.is_item()) || test.current() != i * 10)
+        if ((!test.is_item()) || test.current() != items[i % 5])
         {
-            cout << "    Test failed to find " << i * 10 << endl;
+            cout << "    Test failed to find " << items[i % 5] << endl;
             return 0;
         }
         test.advance();
